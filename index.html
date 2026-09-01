@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hygienist One - Video Embed</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Hygienist Two - The Guide Video Embed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -25,24 +24,11 @@
         }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Smooth fade transitions */
-        .fade-enter {
-            opacity: 0;
-            transform: scale(0.96);
-        }
-        .fade-enter-active {
-            opacity: 1;
-            transform: scale(1);
-            transition: all 200ms ease-out;
-        }
-    </style>
 </head>
 <body class="bg-transparent m-0 p-0 flex items-center justify-center min-h-[260px] w-full">
 
     <div class="w-full max-w-2xl bg-transparent p-1 relative">
         
-        <!-- Video Container -->
         <div class="relative w-full aspect-video bg-ttnNavy rounded-xl overflow-hidden shadow-lg group">
             
             <video 
@@ -50,14 +36,12 @@
                 class="w-full h-full object-cover"
                 playsinline
                 preload="auto"
-                poster="hygienist_one_lecture.jpeg"
+                poster="hygienist_two_guide.jpeg"
                 controls>
-                <!-- Asset filename mapped: hygienist_one_lecture_10s.mp4 -->
-                <source src="hygienist_one_lecture_10s.mp4" type="video/mp4">
+                <source src="hygienist_two_guide_10s.mp4" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
 
-            <!-- Sound Unlock Overlay (Displays automatically if browser blocks unmuted autoplay) -->
             <div 
                 id="soundPrompt" 
                 onclick="enableFullAudio()"
@@ -83,7 +67,6 @@
         const video = document.getElementById('hygienistVideo');
         const soundPrompt = document.getElementById('soundPrompt');
 
-        // Function to start playback with full volume
         function enableFullAudio() {
             video.muted = false;
             video.volume = 1.0;
@@ -94,9 +77,7 @@
             }
         }
 
-        // Automatic playback orchestration
         window.addEventListener('DOMContentLoaded', () => {
-            // Attempt 1: Direct unmuted playback
             video.muted = false;
             video.volume = 1.0;
             
@@ -104,11 +85,8 @@
 
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    // Browser permitted unmuted autoplay (e.g. prior user interaction detected)
                     soundPrompt.classList.add('hidden');
                 }).catch(() => {
-                    // Browser Autoplay Policy blocked unmuted audio:
-                    // Fall back to playing video silently and show the one-click audio trigger
                     video.muted = true;
                     video.play();
                     soundPrompt.classList.remove('hidden');
