@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hygienist One - Video Embed</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ttnNavy: '#0C2340',
+                        ttnTrustBlue: '#005EB8',
+                        ttnActionOrange: '#FE5000',
+                        ttnSlate: '#333F48',
+                        ttnIceBlue: '#DBE2E9'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Smooth fade transitions */
+        .fade-enter {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+        .fade-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: all 200ms ease-out;
+        }
+    </style>
+</head>
+<body class="bg-transparent m-0 p-0 flex items-center justify-center min-h-[260px] w-full">
+
+    <div class="w-full max-w-2xl bg-transparent p-1 relative">
+        
+        <!-- Video Container -->
+        <div class="relative w-full aspect-video bg-ttnNavy rounded-xl overflow-hidden shadow-lg group">
+            
+            <video 
+                id="hygienistVideo"
+                class="w-full h-full object-cover"
+                playsinline
+                preload="auto"
+                poster="hygienist_one_lecture.jpeg"
+                controls>
+                <!-- Asset filename mapped: hygienist_one_lecture_10s.mp4 -->
+                <source src="hygienist_one_lecture_10s.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <!-- Sound Unlock Overlay (Displays automatically if browser blocks unmuted autoplay) -->
+            <div 
+                id="soundPrompt" 
+                onclick="enableFullAudio()"
+                class="hidden absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer transition-all hover:bg-black/30 z-20">
+                <div class="bg-ttnNavy/95 border border-white/20 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform transition hover:scale-105">
+                    <div class="w-10 h-10 rounded-full bg-ttnTrustBlue flex items-center justify-center text-white shadow-inner">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-white">Click anywhere to start video</p>
+                        <p class="text-xs text-ttnIceBlue">Includes clinical dialogue audio</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        const video = document.getElementById('hygienistVideo');
+        const soundPrompt = document.getElementById('soundPrompt');
+
+        // Function to start playback with full volume
+        function enableFullAudio() {
+            video.muted = false;
+            video.volume = 1.0;
+            video.currentTime = 0;
+            video.play();
+            if (soundPrompt) {
+                soundPrompt.classList.add('hidden');
+            }
+        }
+
+        // Automatic playback orchestration
+        window.addEventListener('DOMContentLoaded', () => {
+            // Attempt 1: Direct unmuted playback
+            video.muted = false;
+            video.volume = 1.0;
+            
+            const playPromise = video.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Browser permitted unmuted autoplay (e.g. prior user interaction detected)
+                    soundPrompt.classList.add('hidden');
+                }).catch(() => {
+                    // Browser Autoplay Policy blocked unmuted audio:
+                    // Fall back to playing video silently and show the one-click audio trigger
+                    video.muted = true;
+                    video.play();
+                    soundPrompt.classList.remove('hidden');
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>
